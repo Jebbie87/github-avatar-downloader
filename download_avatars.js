@@ -1,12 +1,14 @@
 var request = require('request');
 var user = require('./user')
+var GITHUB_USER = user.name
+var GITHUB_TOKEN = user.token
 
 console.log('Welcome to the Github Avatar Downloader!');
 
 function getRepoContributors (repoOwner, repoName, cb){
-  var path = 'repos/jquery/jquery/contributors'
+  var requestURL = 'https://' + GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors;'
   request.get({
-            url: 'http://api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
+            url: requestURL,
             auth: {
               user: user.name,
               pass: user.token
@@ -16,9 +18,12 @@ function getRepoContributors (repoOwner, repoName, cb){
             }
           }, function (error, response, body){
     var data = JSON.parse(body);
-    data.forEach(function(avatars){
-      console.log(avatars)
-    })
+
+    // Will print the parsed data as a JSON object to terminal
+    // data.forEach(function(avatars){
+    //   console.log(avatars)
+    // })
+    console.log(requestURL)
   })
 };
 
