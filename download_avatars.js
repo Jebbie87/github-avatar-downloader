@@ -1,6 +1,7 @@
 'user strict';
 const request = require('request');
 const user = require('./user')
+const fs = require('fs')
 const GITHUB_USER = user.name
 const GITHUB_TOKEN = user.token
 
@@ -27,7 +28,18 @@ function getRepoContributors (repoOwner, repoName, cb){
   })
 };
 
-getRepoContributors("nodejs", "node", function(err, result) {
-  console.log("Errors:", err);
-  console.log("Result:", result);
-});
+function downloadImageByURL (url, urlPath){
+    console.log("Downloading avatar image...")
+    request.get(url)
+           .on('end', function(){
+             console.log("Finished downloading avatar image!")
+           })
+           .pipe(fs.createWriteStream('./avatar-image.jpg'))
+}
+
+downloadImageByURL('https://avatars2.githubusercontent.com/', 'u/2741?v=3&s=466", "avatars/kvirani.jpg')
+
+// getRepoContributors("nodejs", "node", function(err, result) {
+//   console.log("Errors:", err);
+//   console.log("Result:", result);
+// });
