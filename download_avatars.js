@@ -22,7 +22,6 @@ function getRepoContributors (repoOwner, repoName, cb){
 };
 
 function downloadImageByURL (url, urlPath){
-  // let filePath = './avatars/' + urlPath + '.jpg';
   request.get(url)
          .pipe(fs.createWriteStream(urlPath));
 }
