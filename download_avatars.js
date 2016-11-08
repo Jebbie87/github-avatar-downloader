@@ -7,20 +7,19 @@ const GITHUB_USER = user.name;
 const GITHUB_TOKEN = user.token;
 const repo = process.argv.slice(2);
 
-if (repo.length === 2){
-  console.log('Welcome to the Github Avatar Downloader!');
-  function getRepoContributors (repoOwner, repoName, cb){
-    const requestURL = 'https://' + GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
-    request.get({
-              url: requestURL,
-              headers: {
-                'User-Agent': 'Firefox'
-              }
-            }, function (error, response, body){
+console.log('Welcome to the Github Avatar Downloader!');
+function getRepoContributors (repoOwner, repoName, cb){
+  const requestURL = 'https://' + GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
+  request.get({
+          url: requestURL,
+          headers: {
+            'User-Agent': 'Firefox'
+          }
+  }, function (error, response, body){
     const data = JSON.parse(body);
     cb(data);
     });
-  };
+};
 
 function downloadImageByURL (url, urlPath){
   // let filePath = './avatars/' + urlPath + '.jpg';
@@ -28,11 +27,12 @@ function downloadImageByURL (url, urlPath){
          .pipe(fs.createWriteStream(urlPath));
 }
 
-getRepoContributors(repo[0], repo[1], function(url){
-  console.log('Downloading avatar images!');
-  url.forEach(function(user){
-    downloadImageByURL(user['avatar_url'], './avatars/' + user['login'] + '.jpg')
-  })
+if (repo.length === 2){
+  getRepoContributors(repo[0], repo[1], function(url){
+    console.log('Downloading avatar images!');
+    url.forEach(function(user){
+      downloadImageByURL(user['avatar_url'], './avatars/' + user['login'] + '.jpg')
+    })
   console.log('All avatar images downloaded!');
 });
 } else {
