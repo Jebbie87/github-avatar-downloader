@@ -2,9 +2,10 @@
 const request = require('request');
 const user = require('./user');
 const fs = require('fs');
+// The values for GITHUB_USER and GITHUB_TOKEN ARE IN ANOTHER FILE
 const GITHUB_USER = user.name;
 const GITHUB_TOKEN = user.token;
-const person = process.argv.slice(2);
+const repo = process.argv.slice(2);
 
 if (person.length === 2){
   console.log('Welcome to the Github Avatar Downloader!');
@@ -27,15 +28,15 @@ function downloadImageByURL (url, urlPath){
          .pipe(fs.createWriteStream(filePath));
 }
 
-getRepoContributors(person[0], person[1], function(url){
+getRepoContributors(repo[0], repo[1], function(url){
   console.log("Downloading avatar images!");
-  url.forEach(function(address){
-    downloadImageByURL(address['avatar_url'], address['login'])
+  url.forEach(function(user){
+    downloadImageByURL(user['avatar_url'], user['login'])
   })
   console.log("All avatar images downloaded!");
 });
 } else {
   console.log("Please put in a valid support line argument!");
-  console.log("The right form is 'node <file name> <repo owner> <repo name>")
-  console.log("An example command is --> node download_avatars.js nodejs node")
+  console.log("The right form is 'node <file name> <repo owner> <repo name>");
+  console.log("An example command is --> node download_avatars.js nodejs node");
 };
