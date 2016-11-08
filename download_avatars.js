@@ -4,6 +4,7 @@ const user = require('./user');
 const fs = require('fs');
 const GITHUB_USER = user.name;
 const GITHUB_TOKEN = user.token;
+const person = process.argv.slice(2)
 
 console.log('Welcome to the Github Avatar Downloader!');
 
@@ -27,7 +28,7 @@ function downloadImageByURL (url, urlPath){
 }
 
 downloadImageByURL("https://avatars.githubusercontent.com/u/1935767?v=3", 'yorkie')
-getRepoContributors("nodejs", "node", function(url){
+getRepoContributors(person[0], person[1], function(url){
   console.log("Downloading avatar images!");
   url.forEach(function(address){
     downloadImageByURL(address['avatar_url'], address['login'])
