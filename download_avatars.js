@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 const request = require('request');
 const user = require('./user');
 const fs = require('fs');
@@ -7,7 +7,7 @@ const GITHUB_USER = user.name;
 const GITHUB_TOKEN = user.token;
 const repo = process.argv.slice(2);
 
-if (person.length === 2){
+if (repo.length === 2){
   console.log('Welcome to the Github Avatar Downloader!');
   function getRepoContributors (repoOwner, repoName, cb){
     const requestURL = 'https://' + GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
@@ -23,20 +23,20 @@ if (person.length === 2){
   };
 
 function downloadImageByURL (url, urlPath){
-  let filePath = "./avatars/" + urlPath + ".jpg";
-  request.get(url + urlPath)
-         .pipe(fs.createWriteStream(filePath));
+  // let filePath = './avatars/' + urlPath + '.jpg';
+  request.get(url)
+         .pipe(fs.createWriteStream(urlPath));
 }
 
 getRepoContributors(repo[0], repo[1], function(url){
-  console.log("Downloading avatar images!");
+  console.log('Downloading avatar images!');
   url.forEach(function(user){
-    downloadImageByURL(user['avatar_url'], user['login'])
+    downloadImageByURL(user['avatar_url'], './avatars/' + user['login'] + '.jpg')
   })
-  console.log("All avatar images downloaded!");
+  console.log('All avatar images downloaded!');
 });
 } else {
-  console.log("Please put in a valid support line argument!");
+  console.log('Please put in a valid support line argument!');
   console.log("The right form is 'node <file name> <repo owner> <repo name>");
-  console.log("An example command is --> node download_avatars.js nodejs node");
+  console.log('An example command is --> node download_avatars.js nodejs node');
 };
